@@ -33,11 +33,34 @@
       .page { width: min(100%, 520px); margin: 0 auto; }
 
       .header {
+        position: relative;
+        overflow: hidden;
         padding: 24px 22px 21px;
         border-radius: 20px 20px 0 0;
         color: white;
         background: linear-gradient(135deg, var(--navy), var(--navy-soft));
         border-bottom: 3px solid var(--gold);
+      }
+
+      .header::after {
+        position: absolute;
+        right: -58px;
+        bottom: -68px;
+        width: min(92%, 430px);
+        aspect-ratio: 3 / 1;
+        background: url("./club.png") center / contain no-repeat;
+        content: "";
+        opacity: .09;
+        pointer-events: none;
+      }
+
+      .header-content { position: relative; z-index: 1; }
+      .club-logo {
+        display: block;
+        width: min(100%, 360px);
+        height: 108px;
+        margin: 0 auto 14px;
+        object-fit: contain;
       }
 
       .brand {
@@ -126,18 +149,31 @@
   <body>
     <main class="page">
       <header class="header">
-        <p class="brand">Reezo+ CLUB</p>
-        <h1>Borang Pendaftaran</h1>
-        <p class="subtitle">Isi maklumat yang diperlukan untuk permohonan Reezo+ CLUB.</p>
+        <div class="header-content">
+          <img class="club-logo" src="./club.png" alt="Logo Reezo+ CLUB" />
+          <p class="brand">REEZO+ CLUB</p>
+          <h1>Borang Pendaftaran</h1>
+          <p class="subtitle">Isi maklumat yang diperlukan untuk permohonan Reezo+ CLUB.</p>
+        </div>
       </header>
 
       <form id="application-form" novalidate>
         <div class="field">
           <label for="broker">Broker pilihan</label>
           <select id="broker" name="broker" required>
+            <option value="" disabled selected>Sila pilih broker</option>
             <option value="amarkets">AMarkets</option>
             <option value="versus">Versus Trade</option>
             <option value="ultima">Ultima</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="application-type">Jenis permohonan</label>
+          <select id="application-type" name="application_type" required>
+            <option value="" disabled selected>Sila pilih jenis permohonan</option>
+            <option value="new_registration">Pendaftaran baru</option>
+            <option value="ib_transfer">Penukaran IB</option>
           </select>
         </div>
 
@@ -147,8 +183,8 @@
         </div>
 
         <div class="field">
-          <label for="account-number">Nombor akaun broker</label>
-          <input id="account-number" name="account_number" type="text" inputmode="text" maxlength="100" placeholder="Masukkan nombor akaun trading" required />
+          <label id="account-label" for="account-number">ID akaun broker</label>
+          <input id="account-number" name="account_number" type="text" inputmode="text" maxlength="100" placeholder="Masukkan ID akaun broker" required />
         </div>
 
         <div class="field">
@@ -177,6 +213,8 @@
         const params = new URLSearchParams(window.location.search);
         const broker = params.get("broker");
         const brokerSelect = document.getElementById("broker");
+        const accountLabel = document.getElementById("account-label");
+        const accountInput = document.getElementById("account-number");
         const form = document.getElementById("application-form");
         const error = document.getElementById("error");
         const sent = document.getElementById("sent");
@@ -191,6 +229,24 @@
         if (["amarkets", "versus", "ultima"].includes(broker)) {
           brokerSelect.value = broker;
         }
+
+        const accountFields = {
+          amarkets: { label: "AMarkets Wallet ID", placeholder: "Masukkan AMarkets Wallet ID" },
+          versus: { label: "Versus UID", placeholder: "Masukkan Versus UID" },
+          ultima: { label: "Ultima UID", placeholder: "Masukkan Ultima UID" },
+        };
+
+        const updateAccountField = () => {
+          const field = accountFields[brokerSelect.value] || {
+            label: "ID akaun broker",
+            placeholder: "Masukkan ID akaun broker",
+          };
+          accountLabel.textContent = field.label;
+          accountInput.placeholder = field.placeholder;
+        };
+
+        brokerSelect.addEventListener("change", updateAccountField);
+        updateAccountField();
 
         form.addEventListener("submit", (event) => {
           event.preventDefault();
@@ -219,6 +275,7 @@
 
           const payload = {
             broker: brokerSelect.value,
+            application_type: document.getElementById("application-type").value,
             full_name: document.getElementById("full-name").value.trim(),
             account_number: document.getElementById("account-number").value.trim(),
             deposit_usd: amount.toFixed(2),
