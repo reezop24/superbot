@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101a2c" />
+    <title>Borang Reezo+ CLUB</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #101a2c;
+        --navy-soft: #1b2942;
+        --gold: #e3bd69;
+        --paper: #f4f6fa;
+        --ink: #192337;
+        --muted: #6e7788;
+        --line: #dce2ec;
+        --danger: #a62b35;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: max(20px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+        background: var(--paper);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .page { width: min(100%, 520px); margin: 0 auto; }
+
+      .header {
+        padding: 24px 22px 21px;
+        border-radius: 20px 20px 0 0;
+        color: white;
+        background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+        border-bottom: 3px solid var(--gold);
+      }
+
+      .brand {
+        margin: 0 0 7px;
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      h1 { margin: 0; font-size: 23px; line-height: 1.25; }
+      .subtitle { margin: 9px 0 0; color: #d8dfeb; font-size: 14px; line-height: 1.5; }
+
+      form {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-top: 0;
+        border-radius: 0 0 20px 20px;
+        background: white;
+        box-shadow: 0 12px 35px #17233a12;
+      }
+
+      .field { margin-bottom: 19px; }
+      label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
+      .hint { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+      input, select {
+        display: block;
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 13px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        outline: none;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+        font-size: 15px;
+      }
+
+      input:focus, select:focus { border-color: #8b9bb8; box-shadow: 0 0 0 3px #8b9bb822; }
+
+      .check-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin: 4px 0 18px;
+        color: #465166;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .check-row input { width: 18px; min-height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--navy); }
+
+      .notice {
+        margin: 0 0 18px;
+        padding: 11px 12px;
+        border-radius: 10px;
+        background: #f7f3e9;
+        color: #63512b;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .error { display: none; margin: 0 0 14px; color: var(--danger); font-size: 13px; line-height: 1.45; }
+
+      button {
+        width: 100%;
+        min-height: 50px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--navy);
+        color: white;
+        font: inherit;
+        font-size: 15px;
+        font-weight: 750;
+        cursor: pointer;
+      }
+
+      button:disabled { cursor: not-allowed; opacity: .55; }
+      .footnote { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; text-align: center; }
+      .sent { display: none; margin-top: 14px; color: #247147; font-size: 13px; line-height: 1.5; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <p class="brand">Reezo+ CLUB</p>
+        <h1>Borang Pendaftaran</h1>
+        <p class="subtitle">Isi maklumat yang diperlukan untuk permohonan Reezo+ CLUB.</p>
+      </header>
+
+      <form id="application-form" novalidate>
+        <div class="field">
+          <label for="broker">Broker pilihan</label>
+          <select id="broker" name="broker" required>
+            <option value="amarkets">AMarkets</option>
+            <option value="versus">Versus Trade</option>
+            <option value="ultima">Ultima</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="full-name">Nama penuh</label>
+          <input id="full-name" name="full_name" type="text" autocomplete="name" maxlength="100" placeholder="Masukkan nama penuh" required />
+        </div>
+
+        <div class="field">
+          <label for="account-number">Nombor akaun broker</label>
+          <input id="account-number" name="account_number" type="text" inputmode="text" maxlength="100" placeholder="Masukkan nombor akaun trading" required />
+        </div>
+
+        <div class="field">
+          <label for="deposit">Jumlah deposit (USD)</label>
+          <input id="deposit" name="deposit_usd" type="number" min="50" max="10000000" step="0.01" inputmode="decimal" placeholder="Contoh: 50" required />
+          <span class="hint">Deposit minimum untuk permohonan Reezo+ CLUB ialah USD 50.</span>
+        </div>
+
+        <p class="notice">Jangan masukkan kata laluan, kod keselamatan atau maklumat kad bank dalam borang ini.</p>
+
+        <label class="check-row" for="consent">
+          <input id="consent" name="consent" type="checkbox" required />
+          <span>Saya bersetuju maklumat borang ini dikongsi dengan admin Reezo+ untuk semakan permohonan CLUB.</span>
+        </label>
+
+        <p id="error" class="error" role="alert"></p>
+        <button id="submit-button" type="submit">Sahkan &amp; Hantar</button>
+        <p id="sent" class="sent" role="status">Borang dihantar. Sila kembali ke chat bot untuk melihat maklum balas.</p>
+        <p class="footnote">Penerimaan permohonan dan semakan admin akan disambungkan dalam langkah seterusnya.</p>
+      </form>
+    </main>
+
+    <script>
+      (() => {
+        const telegram = window.Telegram && window.Telegram.WebApp;
+        const params = new URLSearchParams(window.location.search);
+        const broker = params.get("broker");
+        const brokerSelect = document.getElementById("broker");
+        const form = document.getElementById("application-form");
+        const error = document.getElementById("error");
+        const sent = document.getElementById("sent");
+        const submit = document.getElementById("submit-button");
+
+        if (telegram) {
+          telegram.ready();
+          telegram.expand();
+          telegram.MainButton.hide();
+        }
+
+        if (["amarkets", "versus", "ultima"].includes(broker)) {
+          brokerSelect.value = broker;
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          error.style.display = "none";
+          sent.style.display = "none";
+
+          if (!form.reportValidity()) return;
+          if (!document.getElementById("consent").checked) {
+            error.textContent = "Sila beri persetujuan sebelum menghantar borang.";
+            error.style.display = "block";
+            return;
+          }
+
+          if (!telegram) {
+            error.textContent = "Buka halaman ini melalui butang Mini App dalam Telegram untuk menghantar borang.";
+            error.style.display = "block";
+            return;
+          }
+
+          const amount = Number(document.getElementById("deposit").value);
+          if (!Number.isFinite(amount) || amount < 50) {
+            error.textContent = "Jumlah deposit mestilah sekurang-kurangnya USD 50.";
+            error.style.display = "block";
+            return;
+          }
+
+          const payload = {
+            broker: brokerSelect.value,
+            full_name: document.getElementById("full-name").value.trim(),
+            account_number: document.getElementById("account-number").value.trim(),
+            deposit_usd: amount.toFixed(2),
+            consent: true,
+          };
+
+          submit.disabled = true;
+          submit.textContent = "Menghantar…";
+          telegram.sendData(JSON.stringify(payload));
+          sent.style.display = "block";
+        });
+      })();
+    </script>
+  </body>
+</html>
